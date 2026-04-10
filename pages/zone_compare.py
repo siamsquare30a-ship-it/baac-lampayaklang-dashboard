@@ -53,7 +53,7 @@ def render(filepath: str = REAL_FILE) -> None:
               </div>
               <div style="font-size:13px;color:{color};">ได้ {pct:.1f}% ของเต็ม</div>
               <div style="font-size:12px;margin-top:6px;">
-                ✅ {achieved} &nbsp; ⚠️ {near} &nbsp; 🔴 {below}
+                ✅ {achieved} &nbsp;&nbsp; ⚠️ {near} &nbsp;&nbsp; 🔴 {below}
               </div>
             </div>
             """, unsafe_allow_html=True)
@@ -129,6 +129,7 @@ def render(filepath: str = REAL_FILE) -> None:
             rate = row.get(zone)
             stat = pivot_status.set_index("kpi_name").loc[kpi, zone] if kpi in pivot_status["kpi_name"].values else "-"
             entry[zone] = f"{EMOJI_MAP.get(stat,'')} {rate:.1f}%" if rate is not None else "-"
+            # ไม่แสดงชื่อสถานะ แสดงแค่ emoji + %
         display_rows.append(entry)
 
     st.dataframe(pd.DataFrame(display_rows), use_container_width=True, hide_index=True)

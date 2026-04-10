@@ -27,7 +27,7 @@ def _staff_card(name: str, position: str, score: float, max_score: float = 70.0)
       <div style="font-size:15px;font-weight:700;color:#333;">{name}</div>
       <div style="font-size:12px;color:#666;margin-bottom:6px;">{position}</div>
       <div style="font-size:26px;font-weight:800;color:{color};">{score:.2f} <span style="font-size:14px;color:#888;">/ {max_score:.0f} คะแนน</span></div>
-      <div style="font-size:12px;color:{color};font-weight:600;">{EMOJI_MAP[status]} {status} ({rate:.1f}%)</div>
+      <div style="font-size:12px;color:{color};font-weight:600;">{EMOJI_MAP[status]} {rate:.1f}%</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -136,7 +136,7 @@ def render(filepath: str = REAL_FILE) -> None:
 
     if not disp.empty:
         disp["สถานะ"] = disp["status"].map(
-            lambda s: f"{EMOJI_MAP.get(s,'')} {s}"
+            lambda s: EMOJI_MAP.get(s, "")
         )
         show_cols = {
             "kpi_name":   "หัวข้อ KPI",

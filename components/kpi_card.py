@@ -35,7 +35,7 @@ def kpi_card(label: str, target: float, actual: float,
             จริง: <b>{actual:,.2f}</b> / เป้า: <b>{target:,.2f}</b> {unit}
         </div>
         <div style="font-size:11px; color:{color}; font-weight:600; margin-top:4px;">
-            {status}
+            {"✅" if status == "บรรลุเป้า" else "⚠️" if status == "ใกล้เป้า" else "🔴"}
         </div>
     </div>
     """, unsafe_allow_html=True)

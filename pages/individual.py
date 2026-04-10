@@ -136,7 +136,7 @@ def _render_one_staff(sheet: str, filepath: str) -> None:
     # ตารางละเอียด
     st.subheader(f"📋 ตาราง KPI — {sheet}")
     disp = kpi_df.copy()
-    disp["สถานะ"] = disp["status"].map(lambda s: f"{EMOJI_MAP.get(s,'')} {s}")
+    disp["สถานะ"] = disp["status"].map(lambda s: EMOJI_MAP.get(s, ""))
     disp = disp.rename(columns={
         "kpi_name":      "หัวข้อ KPI",
         "unit":          "หน่วย",
