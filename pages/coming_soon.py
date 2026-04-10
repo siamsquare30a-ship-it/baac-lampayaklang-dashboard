@@ -39,11 +39,7 @@ def render(year: str = "2569") -> None:
             line-height: 1.8;
         ">
             อยู่ระหว่างรอประกาศ KPI และบันทึกข้อตกลงผลการดำเนินงาน<br>
-            ประจำปีบัญชี พ.ศ. {year}<br><br>
-            <span style="color:#999; font-size:13px;">
-                เมื่อประกาศแล้ว — วางไฟล์ Excel ใน <code>data/raw/</code>
-                แล้ว Dashboard จะเปิดใช้งานได้ทันที
-            </span>
+            ประจำปีบัญชี พ.ศ. {year}
         </div>
     </div>
     """, unsafe_allow_html=True)
