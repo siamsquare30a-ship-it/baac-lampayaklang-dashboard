@@ -10,7 +10,6 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from data.real_loader import load_team_kpi, load_dashboard_summary, REAL_FILE
 from components.charts import gauge_chart
-from exports.export_utils import download_excel_button
 
 COLOR_MAP = {"บรรลุเป้า": "#28a745", "ใกล้เป้า": "#ffc107", "ต่ำกว่าเป้า": "#dc3545"}
 EMOJI_MAP = {"บรรลุเป้า": "✅", "ใกล้เป้า": "⚠️", "ต่ำกว่าเป้า": "🔴"}
@@ -175,7 +174,3 @@ def render(filepath: str = REAL_FILE) -> None:
             return [f"background-color:{bg}"] * len(row)
 
         st.dataframe(show_df, use_container_width=True, hide_index=True)
-        download_excel_button(
-            disp, label="📥 ดาวน์โหลด KPI ทีม",
-            filename="team_kpi", sheet_name="ผลงานรวมทีม"
-        )

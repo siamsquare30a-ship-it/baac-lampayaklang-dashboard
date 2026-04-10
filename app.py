@@ -93,14 +93,6 @@ with st.sidebar:
     st.divider()
     if selected_year == "2568":
         file_ok = os.path.exists(YEAR_FILES["2568"])
-        st.caption(f"📂 `ป2หน่วยลำพญากลาง.xlsx`")
-        if file_ok:
-            st.success("พบไฟล์ข้อมูล ✓")
-        else:
-            st.error("ไม่พบไฟล์")
-        if st.button("🔄 รีโหลดข้อมูล", use_container_width=True):
-            st.cache_data.clear()
-            st.rerun()
 
 # =========================================================
 # ROUTE

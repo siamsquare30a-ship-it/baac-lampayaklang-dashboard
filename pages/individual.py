@@ -9,7 +9,6 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from data.real_loader import load_staff_kpi, load_dashboard_summary, STAFF_SHEETS, STAFF_META, REAL_FILE
 from components.charts import gauge_chart
-from exports.export_utils import download_excel_button
 
 COLOR_MAP = {"บรรลุเป้า": "#28a745", "ใกล้เป้า": "#ffc107", "ต่ำกว่าเป้า": "#dc3545"}
 EMOJI_MAP = {"บรรลุเป้า": "✅", "ใกล้เป้า": "⚠️", "ต่ำกว่าเป้า": "🔴"}
@@ -163,8 +162,3 @@ def _render_one_staff(sheet: str, filepath: str) -> None:
                  "ผลจริง", "คะแนนที่ได้", "อัตรา (%)", "สถานะ"]
     show_cols = [c for c in show_cols if c in disp.columns]
     st.dataframe(disp[show_cols], use_container_width=True, hide_index=True)
-
-    download_excel_button(
-        kpi_df, label=f"📥 ดาวน์โหลด KPI {sheet}",
-        filename=f"kpi_{sheet}", sheet_name=sheet
-    )
