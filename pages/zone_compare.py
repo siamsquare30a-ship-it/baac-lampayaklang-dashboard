@@ -4,6 +4,7 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import sys, os
+from datetime import datetime
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from data.real_loader import load_zone_kpi, REAL_FILE
@@ -19,8 +20,20 @@ ZONE_COLORS = {
 }
 
 
+def _data_date_badge(filepath: str) -> None:
+    try:
+        dt = datetime.fromtimestamp(os.path.getmtime(filepath))
+        thai_months = ["","ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.",
+                       "ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."]
+        date_str = f"{dt.day} {thai_months[dt.month]} {dt.year + 543}"
+        st.markdown(f'<div style="text-align:right;font-size:12px;color:#888;margin-top:-10px;">ข้อมูล ณ วันที่ {date_str}</div>', unsafe_allow_html=True)
+    except Exception:
+        pass
+
+
 def render(filepath: str = REAL_FILE) -> None:
     st.header("📍 เปรียบเทียบผลงานรายเขต — พิราวรรณ vs พรพงศ์")
+    _data_date_badge(filepath)
 
     zone_df = load_zone_kpi(filepath)
     if zone_df is None or zone_df.empty:

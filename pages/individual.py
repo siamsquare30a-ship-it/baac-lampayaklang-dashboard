@@ -4,6 +4,7 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import sys, os
+from datetime import datetime
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from data.real_loader import load_staff_kpi, load_dashboard_summary, STAFF_SHEETS, STAFF_META, REAL_FILE
@@ -38,8 +39,20 @@ def _waterfall_chart(df: pd.DataFrame, staff_name: str) -> go.Figure:
     return fig
 
 
+def _data_date_badge(filepath: str) -> None:
+    try:
+        dt = datetime.fromtimestamp(os.path.getmtime(filepath))
+        thai_months = ["","ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.",
+                       "ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."]
+        date_str = f"{dt.day} {thai_months[dt.month]} {dt.year + 543}"
+        st.markdown(f'<div style="text-align:right;font-size:12px;color:#888;margin-top:-10px;">ข้อมูล ณ วันที่ {date_str}</div>', unsafe_allow_html=True)
+    except Exception:
+        pass
+
+
 def render(filepath: str = REAL_FILE) -> None:
     st.header("👤 ผลงานรายบุคคล — Scorecard")
+    _data_date_badge(filepath)
 
     # เลือกพนักงาน
     selected = st.session_state.get("selected_staff", STAFF_SHEETS[0])

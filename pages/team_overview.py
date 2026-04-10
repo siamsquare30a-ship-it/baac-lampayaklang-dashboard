@@ -5,6 +5,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 import sys, os
+from datetime import datetime
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from data.real_loader import load_team_kpi, load_dashboard_summary, REAL_FILE
@@ -27,13 +28,31 @@ def _staff_card(name: str, position: str, score: float, max_score: float = 70.0)
       <div style="font-size:15px;font-weight:700;color:#333;">{name}</div>
       <div style="font-size:12px;color:#666;margin-bottom:6px;">{position}</div>
       <div style="font-size:26px;font-weight:800;color:{color};">{score:.2f} <span style="font-size:14px;color:#888;">/ {max_score:.0f} คะแนน</span></div>
-      <div style="font-size:12px;color:{color};font-weight:600;">{EMOJI_MAP[status]}</div>
     </div>
     """, unsafe_allow_html=True)
 
 
+def _data_date_badge(filepath: str) -> None:
+    """แสดง 'ข้อมูล ณ วันที่' จากวันแก้ไขไฟล์ Excel"""
+    try:
+        mtime = os.path.getmtime(filepath)
+        dt    = datetime.fromtimestamp(mtime)
+        # แปลงเป็น พ.ศ.
+        thai_months = ["", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+                       "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."]
+        date_str = f"{dt.day} {thai_months[dt.month]} {dt.year + 543}"
+        st.markdown(
+            f'<div style="text-align:right;font-size:12px;color:#888;margin-top:-10px;">'
+            f'ข้อมูล ณ วันที่ {date_str}</div>',
+            unsafe_allow_html=True,
+        )
+    except Exception:
+        pass
+
+
 def render(filepath: str = REAL_FILE) -> None:
     st.header("🏦 ภาพรวมทีม — ผลการดำเนินงาน ปีบัญชี 2568")
+    _data_date_badge(filepath)
 
     summary_df = load_dashboard_summary(filepath)
     team_df    = load_team_kpi(filepath)
