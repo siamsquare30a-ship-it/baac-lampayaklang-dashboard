@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+venv/
+.venv/
+
+# Mac
+.DS_Store
+*.DS_Store
+
+# ข้อมูล mock (ไม่ต้อง push)
+data/raw/loan_data.xlsx
+data/raw/deposit_data.xlsx
+data/raw/npl_data.xlsx
+data/raw/insurance_data.xlsx
+data/raw/product_data.xlsx
+
+# Streamlit cache
+.streamlit/secrets.toml
