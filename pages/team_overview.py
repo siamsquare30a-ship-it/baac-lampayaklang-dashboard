@@ -126,7 +126,7 @@ def render(filepath: str = REAL_FILE) -> None:
                       annotation_text="เกณฑ์ 100%")
         fig.update_layout(
             title="คะแนนที่ได้ต่อคะแนนเต็ม รายหัวข้อ KPI (%)",
-            xaxis=dict(title="% คะแนนที่ได้", range=[0, 130]),
+            xaxis=dict(title="% คะแนนที่ได้", range=[0, 100]),
             height=max(400, len(kpi_chart) * 35),
             margin=dict(l=10, r=80, t=50, b=30),
             font=dict(family="Sarabun, sans-serif"),

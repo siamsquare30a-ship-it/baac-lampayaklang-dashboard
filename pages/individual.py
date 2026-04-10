@@ -138,7 +138,7 @@ def _render_one_staff(sheet: str, filepath: str) -> None:
         fig.add_vline(x=100, line_dash="dash", line_color="black")
         fig.update_layout(
             title="คะแนนที่ได้ vs คะแนนเต็ม รายหัวข้อ (%)",
-            xaxis=dict(range=[0, 140], title="% คะแนน"),
+            xaxis=dict(range=[0, 100], title="% คะแนน"),
             height=max(350, len(chart_df) * 38),
             margin=dict(l=10, r=80, t=50, b=30),
             font=dict(family="Sarabun, sans-serif"),
