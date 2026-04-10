@@ -6,13 +6,12 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # =========================================================
-# ค้นหาไฟล์ Excel จริงอัตโนมัติ (ใน folder นี้และ folder แม่)
+# ค้นหาไฟล์ Excel อัตโนมัติ
 # =========================================================
 _THIS_DIR   = os.path.dirname(os.path.abspath(__file__))
 _PARENT_DIR = os.path.dirname(_THIS_DIR)
 
 def _find_excel(filename: str) -> str:
-    """ค้นหาไฟล์ Excel ใน dashboard/data/raw/ หรือ folder แม่"""
     candidates = [
         os.path.join(_THIS_DIR, "data", "raw", filename),
         os.path.join(_PARENT_DIR, filename),
@@ -21,9 +20,13 @@ def _find_excel(filename: str) -> str:
     for p in candidates:
         if os.path.exists(p):
             return p
-    return candidates[0]  # fallback (จะแสดง error ทีหลัง)
+    return candidates[0]
 
-REAL_FILE = _find_excel("ป2หน่วยลำพญากลาง.xlsx")
+# ไฟล์แต่ละปีบัญชี
+YEAR_FILES = {
+    "2568": _find_excel("ป2หน่วยลำพญากลาง.xlsx"),
+    "2569": None,  # ยังไม่มีไฟล์ — Coming Soon
+}
 
 # =========================================================
 # PAGE CONFIG
@@ -56,45 +59,48 @@ with st.sidebar:
     except Exception:
         pass
     st.markdown("### 🏦 ธ.ก.ส. หน่วยลำพญากลาง")
-    st.caption("ปีบัญชี พ.ศ. 2568")
     st.divider()
 
-    page = st.radio(
-        "เมนูหลัก",
-        options=["🏦 ภาพรวมทีม", "📍 เปรียบเทียบรายเขต", "👤 รายบุคคล"],
-        key="nav",
+    # ---- เลือกปีบัญชี ----
+    selected_year = st.radio(
+        "📅 ปีบัญชี",
+        options=["2568", "2569"],
+        format_func=lambda y: f"พ.ศ. {y}" + (" ✅" if y == "2568" else " ⏳"),
+        key="year_select",
+        horizontal=True,
     )
-    page_key = {
-        "🏦 ภาพรวมทีม":         "team",
-        "📍 เปรียบเทียบรายเขต":  "zone",
-        "👤 รายบุคคล":           "individual",
-    }[page]
+    st.session_state["selected_year"] = selected_year
+    st.divider()
+
+    # เมนูหลัก — แสดงเฉพาะปีที่มีข้อมูล
+    if selected_year == "2568":
+        page = st.radio(
+            "เมนูหลัก",
+            options=["🏦 ภาพรวมทีม", "📍 เปรียบเทียบรายเขต", "👤 รายบุคคล"],
+            key="nav",
+        )
+        page_key = {
+            "🏦 ภาพรวมทีม":         "team",
+            "📍 เปรียบเทียบรายเขต":  "zone",
+            "👤 รายบุคคล":           "individual",
+        }[page]
+    else:
+        page_key = "coming_soon"
+        st.info("⏳ รอประกาศ KPI ปีบัญชี 2569")
+
     st.session_state["current_page"] = page_key
 
     st.divider()
-    st.caption(f"📂 ไฟล์: `{os.path.basename(REAL_FILE)}`")
-    file_ok = os.path.exists(REAL_FILE)
-    if file_ok:
-        st.success("พบไฟล์ข้อมูล ✓")
-    else:
-        st.error("ไม่พบไฟล์ข้อมูล")
-
-    if st.button("🔄 รีโหลดข้อมูล", use_container_width=True):
-        st.cache_data.clear()
-        st.rerun()
-
-# =========================================================
-# CHECK FILE
-# =========================================================
-if not file_ok:
-    st.error(f"""
-    ❌ ไม่พบไฟล์: `{REAL_FILE}`
-
-    กรุณาวางไฟล์ **ป2หน่วยลำพญากลาง.xlsx** ใน:
-    - `{os.path.join(_THIS_DIR, 'data', 'raw')}` หรือ
-    - `{_PARENT_DIR}`
-    """)
-    st.stop()
+    if selected_year == "2568":
+        file_ok = os.path.exists(YEAR_FILES["2568"])
+        st.caption(f"📂 `ป2หน่วยลำพญากลาง.xlsx`")
+        if file_ok:
+            st.success("พบไฟล์ข้อมูล ✓")
+        else:
+            st.error("ไม่พบไฟล์")
+        if st.button("🔄 รีโหลดข้อมูล", use_container_width=True):
+            st.cache_data.clear()
+            st.rerun()
 
 # =========================================================
 # ROUTE
@@ -102,12 +108,22 @@ if not file_ok:
 import pages.team_overview  as page_team
 import pages.zone_compare   as page_zone
 import pages.individual     as page_individual
+import pages.coming_soon    as page_coming_soon
 
 current = st.session_state.get("current_page", "team")
 
-if current == "team":
-    page_team.render(REAL_FILE)
-elif current == "zone":
-    page_zone.render(REAL_FILE)
-elif current == "individual":
-    page_individual.render(REAL_FILE)
+if current == "coming_soon":
+    page_coming_soon.render(year="2569")
+
+elif current in ("team", "zone", "individual"):
+    REAL_FILE = YEAR_FILES["2568"]
+    if not os.path.exists(REAL_FILE):
+        st.error(f"❌ ไม่พบไฟล์ข้อมูล กรุณาวางไฟล์ **ป2หน่วยลำพญากลาง.xlsx** ใน `data/raw/`")
+        st.stop()
+
+    if current == "team":
+        page_team.render(REAL_FILE)
+    elif current == "zone":
+        page_zone.render(REAL_FILE)
+    elif current == "individual":
+        page_individual.render(REAL_FILE)
