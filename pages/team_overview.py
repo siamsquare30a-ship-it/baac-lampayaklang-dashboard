@@ -11,10 +11,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from data.real_loader import load_team_kpi, load_dashboard_summary, REAL_FILE
 from components.charts import gauge_chart
 
-# IBM Carbon status colors
-COLOR_MAP = {"บรรลุเป้า": "#24a148", "ใกล้เป้า": "#b28600", "ต่ำกว่าเป้า": "#da1e28"}
+COLOR_MAP = {"บรรลุเป้า": "#059669", "ใกล้เป้า": "#d97706", "ต่ำกว่าเป้า": "#dc2626"}
 EMOJI_MAP = {"บรรลุเป้า": "✅", "ใกล้เป้า": "⚠️", "ต่ำกว่าเป้า": "🔴"}
-BG_MAP    = {"บรรลุเป้า": "#defbe6", "ใกล้เป้า": "#fcf4d6", "ต่ำกว่าเป้า": "#fff1f1"}
+BG_MAP    = {"บรรลุเป้า": "#ecfdf5", "ใกล้เป้า": "#fffbeb", "ต่ำกว่าเป้า": "#fef2f2"}
 
 
 def _staff_card(name: str, position: str, score: float, max_score: float = 70.0) -> None:
@@ -24,16 +23,16 @@ def _staff_card(name: str, position: str, score: float, max_score: float = 70.0)
     bg     = BG_MAP[status]
     tag_label = {"บรรลุเป้า": "บรรลุเป้า", "ใกล้เป้า": "ใกล้เป้า", "ต่ำกว่าเป้า": "ต่ำกว่าเป้า"}[status]
     st.markdown(f"""
-    <div style="background:#f4f4f4;border-left:4px solid {color};
-                border-radius:0px;padding:16px;margin-bottom:8px;
-                border-bottom:1px solid #e0e0e0;">
-      <div style="font-size:11px;color:#525252;letter-spacing:0.32px;
+    <div style="background:#ffffff;border-left:4px solid {color};
+                border-radius:8px;padding:16px;margin-bottom:8px;
+                box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+      <div style="font-size:11px;color:#6b7280;letter-spacing:0.32px;
                   text-transform:uppercase;margin-bottom:6px;">{position}</div>
-      <div style="font-size:18px;font-weight:600;color:#161616;margin-bottom:10px;">{name}</div>
+      <div style="font-size:18px;font-weight:600;color:#111827;margin-bottom:10px;">{name}</div>
       <div style="font-size:34px;font-weight:300;color:{color};line-height:1.1;">{score:.2f}</div>
-      <div style="font-size:12px;color:#525252;letter-spacing:0.32px;margin-bottom:10px;">/ {max_score:.0f} คะแนน</div>
-      <span style="background:{bg};color:{color};padding:3px 10px;
-                   border-radius:24px;font-size:11px;font-weight:600;
+      <div style="font-size:12px;color:#6b7280;letter-spacing:0.32px;margin-bottom:10px;">/ {max_score:.0f} คะแนน</div>
+      <span style="background:{bg};color:{color};padding:2px 10px;
+                   border-radius:20px;font-size:11px;font-weight:600;
                    letter-spacing:0.16px;">{EMOJI_MAP[status]} {tag_label}</span>
     </div>
     """, unsafe_allow_html=True)

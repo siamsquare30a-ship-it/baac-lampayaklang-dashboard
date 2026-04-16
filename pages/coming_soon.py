@@ -32,12 +32,12 @@ def render(year: str = "2569") -> None:
         ">กำลังรอประกาศ KPI</div>
         <div style="
             display: inline-block;
-            background: #0f62fe;
+            background: #00693e;
             color: #ffffff;
             font-size: 12px;
             font-weight: 600;
             padding: 6px 20px;
-            border-radius: 0px;
+            border-radius: 6px;
             margin-bottom: 24px;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -62,13 +62,12 @@ def render(year: str = "2569") -> None:
         unsafe_allow_html=True,
     )
 
-    # IBM Carbon status: success=#24a148, warning=#b28600, neutral=#8d8d8d
     steps = [
-        ("✅", "ปิดปีบัญชี 2568",                   "เสร็จสิ้น",     "#24a148", "#defbe6"),
-        ("✅", "สรุปผลการดำเนินงานปี 2568",           "เสร็จสิ้น",     "#24a148", "#defbe6"),
-        ("⏳", "ประกาศ KPI ปีบัญชี 2569",            "กำลังรอ",       "#b28600", "#fcf4d6"),
-        ("⬜", "บันทึกข้อตกลงผลการดำเนินงาน (MOU)",   "ยังไม่ดำเนินการ","#8d8d8d", "#f4f4f4"),
-        ("⬜", "เปิด Dashboard ปีบัญชี 2569",         "ยังไม่ดำเนินการ","#8d8d8d", "#f4f4f4"),
+        ("✅", "ปิดปีบัญชี 2568",                   "เสร็จสิ้น",     "#00693e", "#ecfdf5"),
+        ("✅", "สรุปผลการดำเนินงานปี 2568",           "เสร็จสิ้น",     "#00693e", "#ecfdf5"),
+        ("⏳", "ประกาศ KPI ปีบัญชี 2569",            "กำลังรอ",       "#d97706", "#fffbeb"),
+        ("⬜", "บันทึกข้อตกลงผลการดำเนินงาน (MOU)",   "ยังไม่ดำเนินการ","#6b7280", "#f9fafb"),
+        ("⬜", "เปิด Dashboard ปีบัญชี 2569",         "ยังไม่ดำเนินการ","#6b7280", "#f9fafb"),
     ]
 
     for icon, label, status, color, bg in steps:
@@ -78,15 +77,15 @@ def render(year: str = "2569") -> None:
             align-items: center;
             gap: 16px;
             padding: 14px 16px;
-            margin-bottom: 2px;
-            background: #f4f4f4;
-            border-radius: 0px;
+            margin-bottom: 4px;
+            background: #ffffff;
+            border-radius: 8px;
             border-left: 4px solid {color};
-            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
         ">
             <span style="font-size: 20px; min-width:28px;">{icon}</span>
             <div style="flex: 1;">
-                <div style="font-size:14px; font-weight:600; color:#161616;
+                <div style="font-size:14px; font-weight:600; color:#111827;
                             letter-spacing:0.16px;">{label}</div>
             </div>
             <span style="
@@ -94,8 +93,8 @@ def render(year: str = "2569") -> None:
                 color: {color};
                 font-weight: 600;
                 background: {bg};
-                padding: 4px 12px;
-                border-radius: 24px;
+                padding: 3px 12px;
+                border-radius: 20px;
                 letter-spacing: 0.16px;
                 white-space: nowrap;
             ">{status}</span>

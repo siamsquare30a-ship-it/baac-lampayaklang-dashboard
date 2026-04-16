@@ -42,12 +42,12 @@ def render_login_page() -> None:
     /* จัด form ให้อยู่กึ่งกลาง */
     [data-testid="stForm"] {
         background: #ffffff !important;
-        border-top: 4px solid #0f62fe !important;
-        border-radius: 0 !important;
+        border-top: 4px solid #00693e !important;
+        border-radius: 8px !important;
         padding: 36px 40px 32px !important;
         max-width: 420px !important;
         margin: 80px auto 0 !important;
-        box-shadow: none !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
     }
 
     /* Input field */
@@ -63,7 +63,7 @@ def render_login_page() -> None:
         font-family: 'IBM Plex Mono', monospace !important;
     }
     [data-testid="stForm"] .stTextInput > div > div > input:focus {
-        border-bottom: 2px solid #0f62fe !important;
+        border-bottom: 2px solid #00693e !important;
         box-shadow: none !important;
         outline: none !important;
     }
@@ -78,8 +78,8 @@ def render_login_page() -> None:
     /* Submit button */
     [data-testid="stForm"] button[kind="primaryFormSubmit"],
     [data-testid="stForm"] button[type="submit"] {
-        border-radius: 0 !important;
-        background: #0f62fe !important;
+        border-radius: 6px !important;
+        background: #00693e !important;
         color: #fff !important;
         font-size: 14px !important;
         font-weight: 600 !important;
@@ -89,20 +89,20 @@ def render_login_page() -> None:
         width: 100% !important;
         margin-top: 4px !important;
     }
-    [data-testid="stForm"] button:hover { background: #0353e9 !important; }
+    [data-testid="stForm"] button:hover { background: #005c36 !important; }
     </style>
     """, unsafe_allow_html=True)
 
     # ── Top bar ──
     st.markdown("""
-    <div style="background:#161616;padding:14px 32px;
+    <div style="background:#00693e;padding:14px 32px;
                 display:flex;align-items:center;gap:14px;width:100%;">
       <div style="font-size:26px;line-height:1;">🏦</div>
       <div>
-        <div style="font-size:14px;font-weight:600;color:#f4f4f4;letter-spacing:.16px;">
+        <div style="font-size:14px;font-weight:600;color:#ffffff;letter-spacing:.16px;">
             ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร
         </div>
-        <div style="font-size:11px;color:#8d8d8d;letter-spacing:.32px;text-transform:uppercase;">
+        <div style="font-size:11px;color:#d1fae5;letter-spacing:.32px;text-transform:uppercase;">
             หน่วยลำพญากลาง · สาขาลำพญากลาง
         </div>
       </div>

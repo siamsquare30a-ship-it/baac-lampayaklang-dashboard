@@ -10,10 +10,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from data.real_loader import load_staff_kpi, load_dashboard_summary, STAFF_SHEETS, STAFF_META, REAL_FILE
 from components.charts import gauge_chart
 
-# IBM Carbon status colors
-COLOR_MAP = {"บรรลุเป้า": "#24a148", "ใกล้เป้า": "#b28600", "ต่ำกว่าเป้า": "#da1e28"}
+COLOR_MAP = {"บรรลุเป้า": "#059669", "ใกล้เป้า": "#d97706", "ต่ำกว่าเป้า": "#dc2626"}
 EMOJI_MAP = {"บรรลุเป้า": "✅", "ใกล้เป้า": "⚠️", "ต่ำกว่าเป้า": "🔴"}
-BG_MAP    = {"บรรลุเป้า": "#defbe6", "ใกล้เป้า": "#fcf4d6", "ต่ำกว่าเป้า": "#fff1f1"}
+BG_MAP    = {"บรรลุเป้า": "#ecfdf5", "ใกล้เป้า": "#fffbeb", "ต่ำกว่าเป้า": "#fef2f2"}
 
 
 def _waterfall_chart(df: pd.DataFrame, staff_name: str) -> go.Figure:
@@ -88,22 +87,22 @@ def _render_one_staff(sheet: str, filepath: str) -> None:
     with c_info:
         tag_label = {"บรรลุเป้า": "บรรลุเป้า", "ใกล้เป้า": "ใกล้เป้า", "ต่ำกว่าเป้า": "ต่ำกว่าเป้า"}[status]
         st.markdown(f"""
-        <div style="background:#f4f4f4;border-left:4px solid {color};
-                    border-radius:0px;padding:16px 20px;margin-bottom:10px;
-                    border-bottom:1px solid #e0e0e0;">
-          <div style="font-size:11px;color:#525252;letter-spacing:0.32px;
+        <div style="background:#ffffff;border-left:4px solid {color};
+                    border-radius:8px;padding:16px 20px;margin-bottom:10px;
+                    box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+          <div style="font-size:11px;color:#6b7280;letter-spacing:0.32px;
                       text-transform:uppercase;margin-bottom:6px;">
             {meta.get('position','')} &nbsp;·&nbsp; {meta.get('zone','')}
           </div>
-          <div style="font-size:22px;font-weight:600;color:#161616;margin-bottom:8px;">
+          <div style="font-size:22px;font-weight:600;color:#111827;margin-bottom:8px;">
             {meta.get('full_name', sheet)}
           </div>
           <div style="font-size:38px;font-weight:300;color:{color};line-height:1.1;">{score_perf:.2f}</div>
-          <div style="font-size:12px;color:#525252;letter-spacing:0.32px;margin-bottom:12px;">
+          <div style="font-size:12px;color:#6b7280;letter-spacing:0.32px;margin-bottom:12px;">
             / {max_perf:.0f} คะแนน Performance
           </div>
-          <span style="background:{BG_MAP[status]};color:{color};padding:4px 12px;
-                       border-radius:24px;font-size:11px;font-weight:600;letter-spacing:0.16px;">
+          <span style="background:{BG_MAP[status]};color:{color};padding:3px 12px;
+                       border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.16px;">
             {EMOJI_MAP[status]} {tag_label}
           </span>
         </div>

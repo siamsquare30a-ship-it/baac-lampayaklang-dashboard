@@ -9,15 +9,13 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from data.real_loader import load_zone_kpi, REAL_FILE
 
-# IBM Carbon status colors
-COLOR_MAP = {"บรรลุเป้า": "#24a148", "ใกล้เป้า": "#b28600", "ต่ำกว่าเป้า": "#da1e28"}
+COLOR_MAP = {"บรรลุเป้า": "#059669", "ใกล้เป้า": "#d97706", "ต่ำกว่าเป้า": "#dc2626"}
 EMOJI_MAP = {"บรรลุเป้า": "✅", "ใกล้เป้า": "⚠️", "ต่ำกว่าเป้า": "🔴"}
-BG_MAP    = {"บรรลุเป้า": "#defbe6", "ใกล้เป้า": "#fcf4d6", "ต่ำกว่าเป้า": "#fff1f1"}
+BG_MAP    = {"บรรลุเป้า": "#ecfdf5", "ใกล้เป้า": "#fffbeb", "ต่ำกว่าเป้า": "#fef2f2"}
 
-# IBM Blue 60 + Cyan 50 (Carbon palette)
 ZONE_COLORS = {
-    "เขต พิราวรรณ": "#0f62fe",
-    "เขต พรพงศ์":  "#1192e8",
+    "เขต พิราวรรณ": "#00693e",
+    "เขต พรพงศ์":   "#059669",
 }
 
 
@@ -59,18 +57,18 @@ def render(filepath: str = REAL_FILE) -> None:
         color = ZONE_COLORS.get(zone, "#6c757d")
         with col:
             st.markdown(f"""
-            <div style="background:#f4f4f4;border-left:4px solid {color};
-                        border-radius:0px;padding:16px;margin-bottom:8px;
-                        border-bottom:1px solid #e0e0e0;">
-              <div style="font-size:11px;color:#525252;letter-spacing:0.32px;
+            <div style="background:#ffffff;border-left:4px solid {color};
+                        border-radius:8px;padding:16px;margin-bottom:8px;
+                        box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+              <div style="font-size:11px;color:#6b7280;letter-spacing:0.32px;
                           text-transform:uppercase;margin-bottom:6px;">{zone}</div>
               <div style="font-size:36px;font-weight:300;color:{color};line-height:1.1;">{total_sc:.2f}</div>
-              <div style="font-size:12px;color:#525252;letter-spacing:0.32px;margin-bottom:10px;">/ {total_max:.1f} คะแนน</div>
+              <div style="font-size:12px;color:#6b7280;letter-spacing:0.32px;margin-bottom:10px;">/ {total_max:.1f} คะแนน</div>
               <div style="font-size:13px;font-weight:600;color:{color};margin-bottom:10px;">ได้ {pct:.1f}% ของเต็ม</div>
               <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                <span style="background:#defbe6;color:#24a148;padding:3px 10px;border-radius:24px;font-size:11px;font-weight:600;">✅ {achieved}</span>
-                <span style="background:#fcf4d6;color:#b28600;padding:3px 10px;border-radius:24px;font-size:11px;font-weight:600;">⚠️ {near}</span>
-                <span style="background:#fff1f1;color:#da1e28;padding:3px 10px;border-radius:24px;font-size:11px;font-weight:600;">🔴 {below}</span>
+                <span style="background:#ecfdf5;color:#059669;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;">✅ {achieved}</span>
+                <span style="background:#fffbeb;color:#d97706;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;">⚠️ {near}</span>
+                <span style="background:#fef2f2;color:#dc2626;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;">🔴 {below}</span>
               </div>
             </div>
             """, unsafe_allow_html=True)
