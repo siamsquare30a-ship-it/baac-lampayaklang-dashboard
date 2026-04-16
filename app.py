@@ -180,6 +180,85 @@ hr { border-color: #e5e7eb !important; margin: 24px 0 !important; }
 /* ── Warning/Info banners ── */
 [data-testid="stAlert"] { border-radius: 8px !important; }
 
+/* ═══════════════════════════════════════
+   MOBILE RESPONSIVE  (< 768px)
+   Reference: IBM Carbon breakpoint "md"
+   ═══════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* Block container padding ลดลง */
+  .block-container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    padding-top: 0.5rem !important;
+  }
+
+  /* Columns → stack แนวตั้ง */
+  [data-testid="stHorizontalBlock"] {
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+  [data-testid="stHorizontalBlock"] > [data-testid="stVerticalBlock"] {
+    width: 100% !important;
+    min-width: 100% !important;
+    flex: 1 1 100% !important;
+  }
+
+  /* Headers ย่อลง */
+  h1 { font-size: 1.4rem !important; }
+  h2 { font-size: 1.2rem !important; }
+  h3 { font-size: 1.1rem !important; }
+
+  /* Metric card เต็มความกว้าง */
+  [data-testid="metric-container"] {
+    padding: 10px 12px !important;
+  }
+  [data-testid="stMetricValue"] { font-size: 1.6rem !important; }
+
+  /* Tabs — scroll แนวนอน */
+  .stTabs [data-baseweb="tab-list"] {
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .stTabs [data-baseweb="tab"] {
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Chart — scroll แนวนอน */
+  [data-testid="stPlotlyChart"] {
+    overflow-x: auto !important;
+  }
+
+  /* Banner สูงลดลงบนมือถือ */
+  .team-banner-wrap {
+    height: 180px !important;
+    margin-left: -1rem !important;
+    margin-top: -0.5rem !important;
+    width: calc(100% + 2rem) !important;
+  }
+
+  /* Staff cards — text ย่อ */
+  /* Login form */
+  [data-testid="stForm"] {
+    padding: 24px 20px 20px !important;
+    margin: 40px auto 0 !important;
+  }
+
+  /* Selectbox เต็มกว้าง */
+  .stSelectbox { width: 100% !important; }
+
+  /* Dataframe scroll */
+  [data-testid="stDataFrame"] {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ซ่อน sidebar default บนมือถือ (Streamlit จัดการเองอยู่แล้ว) */
+}
+
 /* ── Logout button — เขียวเข้ม ข้อความขาวชัด ── */
 section[data-testid="stSidebar"] .stButton > button {
   background-color: #00693e !important;
