@@ -179,6 +179,21 @@ hr { border-color: #e5e7eb !important; margin: 24px 0 !important; }
 
 /* ── Warning/Info banners ── */
 [data-testid="stAlert"] { border-radius: 8px !important; }
+
+/* ── Logout button — เขียวเข้ม ข้อความขาวชัด ── */
+section[data-testid="stSidebar"] .stButton > button {
+  background-color: #00693e !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 6px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  opacity: 1 !important;
+}
+section[data-testid="stSidebar"] .stButton > button * {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -195,14 +210,19 @@ if not check_login():
 # SIDEBAR (เฉพาะผู้ที่ login แล้ว)
 # =========================================================
 with st.sidebar:
-    try:
-        st.image(
-            "https://upload.wikimedia.org/wikipedia/th/thumb/9/9d/Logo_BAAC.png/240px-Logo_BAAC.png",
-            width=80,
-        )
-    except Exception:
-        pass
-    st.markdown("### 🏦 ธ.ก.ส. หน่วยลำพญากลาง")
+    # Logo ธ.ก.ส. — ใช้ HTML แทน external image ที่โหลดไม่ได้
+    st.markdown("""
+    <div style="display:flex;align-items:center;gap:10px;padding:4px 0 8px;">
+      <div style="background:#00693e;color:#ffffff;font-size:15px;font-weight:800;
+                  width:44px;height:44px;border-radius:8px;display:flex;
+                  align-items:center;justify-content:center;letter-spacing:0.5px;
+                  flex-shrink:0;">ธ.ก.ส</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#111827;line-height:1.2;">ธ.ก.ส.</div>
+        <div style="font-size:11px;color:#6b7280;">หน่วยลำพญากลาง</div>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
     st.divider()
 
     # ---- ข้อมูลผู้ใช้ ----
