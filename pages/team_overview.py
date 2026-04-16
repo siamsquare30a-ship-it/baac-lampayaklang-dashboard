@@ -56,8 +56,54 @@ def _data_date_badge(filepath: str) -> None:
         pass
 
 
+def _team_banner() -> None:
+    """Banner รูปทีม พร้อม overlay ชื่อหน่วยงาน"""
+    import base64, os as _os
+    banner_path = _os.path.join(_os.path.dirname(__file__), "..", "assets", "team_banner.jpg")
+    try:
+        with open(banner_path, "rb") as f:
+            b64 = base64.b64encode(f.read()).decode()
+        st.markdown(f"""
+        <div style="
+            position: relative;
+            width: 100%;
+            height: 200px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        ">
+          <img src="data:image/jpeg;base64,{b64}"
+               style="width:100%;height:100%;object-fit:cover;object-position:center 30%;" />
+          <div style="
+              position: absolute; inset: 0;
+              background: linear-gradient(to right,
+                  rgba(0,80,40,0.72) 0%,
+                  rgba(0,80,40,0.35) 60%,
+                  transparent 100%);
+              display: flex; align-items: center;
+              padding: 0 32px;
+          ">
+            <div>
+              <div style="font-size:11px;color:#a7f3d0;letter-spacing:0.32px;
+                          text-transform:uppercase;margin-bottom:4px;">
+                  ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร
+              </div>
+              <div style="font-size:26px;font-weight:300;color:#ffffff;line-height:1.2;">
+                  หน่วยลำพญากลาง
+              </div>
+              <div style="font-size:13px;color:#d1fae5;margin-top:4px;">
+                  ผลการดำเนินงาน ปีบัญชี 2568
+              </div>
+            </div>
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
+    except Exception:
+        pass
+
+
 def render(filepath: str = REAL_FILE) -> None:
-    st.header("🏦 ภาพรวมทีม — ผลการดำเนินงาน ปีบัญชี 2568")
+    _team_banner()
     _data_date_badge(filepath)
 
     summary_df = load_dashboard_summary(filepath)
