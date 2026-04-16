@@ -64,34 +64,42 @@ def _team_banner() -> None:
         with open(banner_path, "rb") as f:
             b64 = base64.b64encode(f.read()).decode()
         st.markdown(f"""
-        <div style="
+        <style>
+        /* ดัน banner ชิดขอบบน — ลบ padding ของ block-container เฉพาะหน้านี้ */
+        .team-banner-wrap {{
             position: relative;
-            width: 100%;
-            height: 200px;
-            border-radius: 12px;
+            width: calc(100% + 8rem);
+            margin-left: -4rem;
+            margin-top: -4rem;
+            height: 320px;
             overflow: hidden;
-            margin-bottom: 24px;
-        ">
+            margin-bottom: 28px;
+        }}
+        @media (max-width: 768px) {{
+            .team-banner-wrap {{ width: calc(100% + 2rem); margin-left: -1rem; margin-top: -2rem; }}
+        }}
+        </style>
+        <div class="team-banner-wrap">
           <img src="data:image/jpeg;base64,{b64}"
-               style="width:100%;height:100%;object-fit:cover;object-position:center 30%;" />
+               style="width:100%;height:100%;object-fit:cover;object-position:center 15%;" />
           <div style="
               position: absolute; inset: 0;
               background: linear-gradient(to right,
-                  rgba(0,80,40,0.72) 0%,
-                  rgba(0,80,40,0.35) 60%,
+                  rgba(0,60,30,0.78) 0%,
+                  rgba(0,60,30,0.40) 55%,
                   transparent 100%);
-              display: flex; align-items: center;
-              padding: 0 32px;
+              display: flex; align-items: flex-end;
+              padding: 0 40px 32px;
           ">
             <div>
               <div style="font-size:11px;color:#a7f3d0;letter-spacing:0.32px;
-                          text-transform:uppercase;margin-bottom:4px;">
+                          text-transform:uppercase;margin-bottom:6px;">
                   ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร
               </div>
-              <div style="font-size:26px;font-weight:300;color:#ffffff;line-height:1.2;">
+              <div style="font-size:32px;font-weight:300;color:#ffffff;line-height:1.2;">
                   หน่วยลำพญากลาง
               </div>
-              <div style="font-size:13px;color:#d1fae5;margin-top:4px;">
+              <div style="font-size:14px;color:#d1fae5;margin-top:6px;">
                   ผลการดำเนินงาน ปีบัญชี 2568
               </div>
             </div>
