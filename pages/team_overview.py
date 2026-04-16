@@ -15,6 +15,20 @@ COLOR_MAP = {"บรรลุเป้า": "#059669", "ใกล้เป้า
 EMOJI_MAP = {"บรรลุเป้า": "✅", "ใกล้เป้า": "⚠️", "ต่ำกว่าเป้า": "🔴"}
 BG_MAP    = {"บรรลุเป้า": "#ecfdf5", "ใกล้เป้า": "#fffbeb", "ต่ำกว่าเป้า": "#fef2f2"}
 
+import re as _re
+
+def _kpi_sort_key(name: str):
+    nums = _re.findall(r'\d+', name.split()[0] if name.strip() else "")
+    return tuple(int(n) for n in nums) if nums else (999,)
+
+def _sort_kpi(df: pd.DataFrame) -> pd.DataFrame:
+    if "kpi_name" not in df.columns:
+        return df
+    df = df.copy()
+    df["_sort_key"] = df["kpi_name"].apply(_kpi_sort_key)
+    df = df.sort_values("_sort_key").drop(columns=["_sort_key"])
+    return df.reset_index(drop=True)
+
 
 def _staff_card(name: str, position: str, score: float, max_score: float = 70.0) -> None:
     rate   = round(score / max_score * 100, 1)
@@ -132,7 +146,7 @@ def render(filepath: str = REAL_FILE) -> None:
         st.warning("ไม่พบข้อมูล ผลงานรวมทีม")
         return
 
-    kpi_df = team_df[team_df.get("is_total", False) == False].copy()
+    kpi_df = _sort_kpi(team_df[team_df.get("is_total", False) == False].copy())
 
     # =========================================================
     # ROW 2: Gauge ภาพรวม + คะแนนสรุป

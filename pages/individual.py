@@ -14,6 +14,26 @@ COLOR_MAP = {"บรรลุเป้า": "#059669", "ใกล้เป้า
 EMOJI_MAP = {"บรรลุเป้า": "✅", "ใกล้เป้า": "⚠️", "ต่ำกว่าเป้า": "🔴"}
 BG_MAP    = {"บรรลุเป้า": "#ecfdf5", "ใกล้เป้า": "#fffbeb", "ต่ำกว่าเป้า": "#fef2f2"}
 
+import re as _re
+
+def _kpi_sort_key(name: str):
+    """แปลงชื่อ KPI เป็น tuple ตัวเลข เพื่อเรียงลำดับ เช่น
+    '8.3.10 งวด...' → (8, 3, 10)
+    '14. อัตรา...' → (14,)
+    'abc'           → (999,)
+    """
+    nums = _re.findall(r'\d+', name.split()[0] if name.strip() else "")
+    return tuple(int(n) for n in nums) if nums else (999,)
+
+def _sort_kpi(df: pd.DataFrame) -> pd.DataFrame:
+    """เรียง DataFrame ตามหมายเลข KPI"""
+    if "kpi_name" not in df.columns:
+        return df
+    df = df.copy()
+    df["_sort_key"] = df["kpi_name"].apply(_kpi_sort_key)
+    df = df.sort_values("_sort_key").drop(columns=["_sort_key"])
+    return df.reset_index(drop=True)
+
 
 def _waterfall_chart(df: pd.DataFrame, staff_name: str) -> go.Figure:
     """Waterfall คะแนนสะสมรายหัวข้อ"""
@@ -67,7 +87,7 @@ def render(filepath: str = REAL_FILE) -> None:
 
 def _render_one_staff(sheet: str, filepath: str) -> None:
     meta   = STAFF_META.get(sheet, {})
-    kpi_df = load_staff_kpi(sheet, filepath)
+    kpi_df = _sort_kpi(load_staff_kpi(sheet, filepath))
 
     # Header card
     summary_df = load_dashboard_summary(filepath)
