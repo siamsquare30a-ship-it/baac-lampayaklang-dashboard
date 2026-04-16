@@ -124,38 +124,61 @@ def _render_one_staff(sheet: str, filepath: str) -> None:
     m2.metric("⚠️ ใกล้เป้า",   (kpi_df["status"] == "ใกล้เป้า").sum())
     m3.metric("🔴 ต่ำกว่าเป้า", (kpi_df["status"] == "ต่ำกว่าเป้า").sum())
 
-    # Horizontal bar: score obtained vs weight
+    # Horizontal bar: แยก "ต้องติดตาม" กับ "บรรลุแล้ว"
     chart_df = kpi_df[kpi_df["score_obtained"].notna()].copy()
     if not chart_df.empty:
         chart_df["pct_score"] = chart_df.apply(
             lambda r: round(r["score_obtained"] / r["weight"] * 100, 1)
             if r["weight"] and r["weight"] > 0 else 0, axis=1
         )
-        colors = chart_df["status"].map(
-            lambda s: COLOR_MAP.get(s, "#aaa")
-        ).tolist()
-        short = [n[:40] + "…" if len(n) > 40 else n for n in chart_df["kpi_name"]]
-        fig = go.Figure(go.Bar(
-            y=short,
-            x=chart_df["pct_score"],
-            orientation="h",
-            marker_color=colors,
-            text=[f"{r['score_obtained']:.2f}/{r['weight']:.1f}" for _, r in chart_df.iterrows()],
-            textposition="outside",
-        ))
-        fig.add_vline(x=100, line_dash="dash", line_color="black")
-        fig.update_layout(
-            title=dict(text="คะแนนที่ได้ vs คะแนนเต็ม รายหัวข้อ (%)",
-                       font=dict(size=16, weight=300, color="#161616")),
-            xaxis=dict(range=[0, 100], title="% คะแนน",
-                       gridcolor="#e0e0e0", linecolor="#c6c6c6", tickfont=dict(color="#525252")),
-            yaxis=dict(tickfont=dict(color="#161616", size=13)),
-            height=max(350, len(chart_df) * 42),
-            margin=dict(l=10, r=100, t=50, b=30),
-            plot_bgcolor="#ffffff", paper_bgcolor="#ffffff",
-            font=dict(family="IBM Plex Sans, Sarabun, sans-serif"),
-        )
-        st.plotly_chart(fig, use_container_width=True)
+
+        needs_attn = chart_df[chart_df["pct_score"] < 100].copy()
+        on_track   = chart_df[chart_df["pct_score"] >= 100].copy()
+
+        def _make_bar(df: pd.DataFrame) -> go.Figure:
+            colors = df["status"].map(lambda s: COLOR_MAP.get(s, "#aaa")).tolist()
+            short  = [n[:40] + "…" if len(n) > 40 else n for n in df["kpi_name"]]
+            fig = go.Figure(go.Bar(
+                y=short, x=df["pct_score"], orientation="h",
+                marker_color=colors,
+                text=[f"{r['score_obtained']:.2f}/{r['weight']:.1f} ({r['pct_score']:.0f}%)"
+                      for _, r in df.iterrows()],
+                textposition="outside",
+            ))
+            fig.add_vline(x=100, line_dash="dash", line_color="#6b7280", line_width=1)
+            fig.update_layout(
+                xaxis=dict(range=[0, 115], title="% คะแนน",
+                           gridcolor="#f3f4f6", linecolor="#e5e7eb",
+                           tickfont=dict(color="#6b7280", size=12)),
+                yaxis=dict(tickfont=dict(color="#111827", size=13)),
+                height=max(180, len(df) * 44 + 60),
+                margin=dict(l=10, r=130, t=16, b=16),
+                plot_bgcolor="#ffffff", paper_bgcolor="#ffffff",
+                font=dict(family="IBM Plex Sans, Sarabun, sans-serif"),
+                showlegend=False,
+            )
+            return fig
+
+        # ── ต้องติดตาม ──
+        if not needs_attn.empty:
+            st.markdown(
+                f'<div style="font-size:13px;font-weight:600;color:#d97706;'
+                f'margin-bottom:4px;">⚠️ ต้องติดตาม ({len(needs_attn)} รายการ)</div>',
+                unsafe_allow_html=True,
+            )
+            st.plotly_chart(_make_bar(needs_attn), use_container_width=True)
+        else:
+            st.markdown(
+                '<div style="background:#ecfdf5;border-left:4px solid #059669;'
+                'padding:12px 16px;border-radius:8px;font-size:14px;color:#059669;'
+                'font-weight:600;">✅ ทุกหัวข้อ KPI บรรลุเป้าหมายแล้ว!</div>',
+                unsafe_allow_html=True,
+            )
+
+        # ── บรรลุแล้ว (ซ่อนไว้ใน expander) ──
+        if not on_track.empty:
+            with st.expander(f"✅ KPI ที่บรรลุเป้าแล้ว ({len(on_track)} รายการ)"):
+                st.plotly_chart(_make_bar(on_track), use_container_width=True)
 
     # ตารางละเอียด
     st.subheader(f"📋 ตาราง KPI — {sheet}")
