@@ -120,26 +120,29 @@ def render(filepath: str = REAL_FILE) -> None:
         on_track   = kpi_chart[kpi_chart["pct"] >= 100].copy()
 
         def _make_team_bar(df: pd.DataFrame) -> go.Figure:
-            colors     = df["status"].map(lambda s: COLOR_MAP.get(s, "#aaa")).tolist()
+            colors      = df["status"].map(lambda s: COLOR_MAP.get(s, "#aaa")).tolist()
             short_names = [n[:35] + "…" if len(n) > 35 else n for n in df["kpi_name"]]
             fig = go.Figure(go.Bar(
                 y=short_names, x=df["pct"], orientation="h",
                 marker_color=colors,
+                width=0.35,
                 text=[f"{r['score']:.2f}/{r['max_score']:.1f} ({r['pct']:.0f}%)"
                       for _, r in df.iterrows()],
                 textposition="outside",
+                textfont=dict(size=12),
             ))
             fig.add_vline(x=100, line_dash="dash", line_color="#6b7280", line_width=1)
             fig.update_layout(
-                xaxis=dict(title="% คะแนนที่ได้", range=[0, 115],
+                xaxis=dict(title="% คะแนนที่ได้", range=[0, 125],
                            gridcolor="#f3f4f6", linecolor="#e5e7eb",
                            tickfont=dict(color="#6b7280", size=12)),
                 yaxis=dict(tickfont=dict(color="#111827", size=13)),
-                height=max(180, len(df) * 44 + 60),
-                margin=dict(l=10, r=130, t=16, b=16),
+                height=max(160, len(df) * 32 + 60),
+                margin=dict(l=10, r=140, t=16, b=16),
                 plot_bgcolor="#ffffff", paper_bgcolor="#ffffff",
                 font=dict(family="IBM Plex Sans, Sarabun, sans-serif"),
                 showlegend=False,
+                bargap=0.6,
             )
             return fig
 
