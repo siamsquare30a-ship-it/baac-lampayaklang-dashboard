@@ -178,17 +178,38 @@ hr { border-color: #e0e0e0 !important; margin: 24px 0 !important; }
 """, unsafe_allow_html=True)
 
 # =========================================================
-# SIDEBAR
+# AUTHENTICATION GATE
+# =========================================================
+from auth.login import check_login, render_login_page, logout
+
+if not check_login():
+    render_login_page()
+    st.stop()
+
+# =========================================================
+# SIDEBAR (เฉพาะผู้ที่ login แล้ว)
 # =========================================================
 with st.sidebar:
     try:
         st.image(
             "https://upload.wikimedia.org/wikipedia/th/thumb/9/9d/Logo_BAAC.png/240px-Logo_BAAC.png",
-            width=100,
+            width=80,
         )
     except Exception:
         pass
     st.markdown("### 🏦 ธ.ก.ส. หน่วยลำพญากลาง")
+    st.divider()
+
+    # ---- ข้อมูลผู้ใช้ ----
+    emp_name = st.session_state.get("employee_name", "")
+    emp_id   = st.session_state.get("employee_id", "")
+    st.markdown(
+        f'<div style="font-size:11px;color:#8d8d8d;letter-spacing:0.32px;'
+        f'text-transform:uppercase;margin-bottom:4px;">ผู้ใช้งาน</div>'
+        f'<div style="font-size:14px;font-weight:600;color:#f4f4f4;margin-bottom:2px;">{emp_name}</div>'
+        f'<div style="font-size:11px;color:#6f6f6f;letter-spacing:0.32px;">รหัส {emp_id}</div>',
+        unsafe_allow_html=True,
+    )
     st.divider()
 
     # ---- เลือกปีบัญชี ----
@@ -221,6 +242,10 @@ with st.sidebar:
     st.session_state["current_page"] = page_key
 
     st.divider()
+    # ---- ปุ่ม Logout ----
+    if st.button("🔓 ออกจากระบบ", use_container_width=True):
+        logout()
+
     if selected_year == "2568":
         file_ok = os.path.exists(YEAR_FILES["2568"])
 
