@@ -141,24 +141,24 @@ def _render_one_staff(sheet: str, filepath: str) -> None:
             fig = go.Figure(go.Bar(
                 y=short, x=df["pct_score"], orientation="h",
                 marker_color=colors,
-                width=0.35,
+                width=0.18,
                 text=[f"{r['score_obtained']:.2f}/{r['weight']:.1f} ({r['pct_score']:.0f}%)"
                       for _, r in df.iterrows()],
                 textposition="outside",
-                textfont=dict(size=12),
+                textfont=dict(size=11, color="#374151"),
             ))
-            fig.add_vline(x=100, line_dash="dash", line_color="#6b7280", line_width=1)
+            fig.add_vline(x=100, line_dash="dash", line_color="#9ca3af", line_width=1)
             fig.update_layout(
-                xaxis=dict(range=[0, 125], title="% คะแนน",
-                           gridcolor="#f3f4f6", linecolor="#e5e7eb",
-                           tickfont=dict(color="#6b7280", size=12)),
-                yaxis=dict(tickfont=dict(color="#111827", size=13)),
-                height=max(160, len(df) * 32 + 60),
-                margin=dict(l=10, r=140, t=16, b=16),
+                xaxis=dict(range=[0, 130], title=None,
+                           gridcolor="#f9fafb", linecolor="#e5e7eb",
+                           tickfont=dict(color="#9ca3af", size=11)),
+                yaxis=dict(tickfont=dict(color="#374151", size=12)),
+                height=max(120, len(df) * 22 + 50),
+                margin=dict(l=10, r=150, t=8, b=8),
                 plot_bgcolor="#ffffff", paper_bgcolor="#ffffff",
                 font=dict(family="IBM Plex Sans, Sarabun, sans-serif"),
                 showlegend=False,
-                bargap=0.6,
+                bargap=0.75,
             )
             return fig
 
