@@ -90,6 +90,9 @@ def render_login_page() -> None:
         margin-top: 4px !important;
     }
     [data-testid="stForm"] button:hover { background: #005c36 !important; }
+
+    /* ซ่อน "Press Enter to submit form" */
+    [data-testid="InputInstructions"] { display: none !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -122,7 +125,7 @@ def render_login_page() -> None:
 
         emp_id = st.text_input(
             "รหัสพนักงาน",
-            placeholder="เช่น 6000261",
+            placeholder="",
             max_chars=10,
         )
         submitted = st.form_submit_button(
