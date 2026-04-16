@@ -11,9 +11,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from data.real_loader import load_team_kpi, load_dashboard_summary, REAL_FILE
 from components.charts import gauge_chart
 
-COLOR_MAP = {"บรรลุเป้า": "#28a745", "ใกล้เป้า": "#ffc107", "ต่ำกว่าเป้า": "#dc3545"}
+# IBM Carbon status colors
+COLOR_MAP = {"บรรลุเป้า": "#24a148", "ใกล้เป้า": "#b28600", "ต่ำกว่าเป้า": "#da1e28"}
 EMOJI_MAP = {"บรรลุเป้า": "✅", "ใกล้เป้า": "⚠️", "ต่ำกว่าเป้า": "🔴"}
-BG_MAP    = {"บรรลุเป้า": "#d4edda", "ใกล้เป้า": "#fff3cd", "ต่ำกว่าเป้า": "#f8d7da"}
+BG_MAP    = {"บรรลุเป้า": "#defbe6", "ใกล้เป้า": "#fcf4d6", "ต่ำกว่าเป้า": "#fff1f1"}
 
 
 def _staff_card(name: str, position: str, score: float, max_score: float = 70.0) -> None:
@@ -21,12 +22,19 @@ def _staff_card(name: str, position: str, score: float, max_score: float = 70.0)
     status = "บรรลุเป้า" if rate >= 100 else "ใกล้เป้า" if rate >= 80 else "ต่ำกว่าเป้า"
     color  = COLOR_MAP[status]
     bg     = BG_MAP[status]
+    tag_label = {"บรรลุเป้า": "บรรลุเป้า", "ใกล้เป้า": "ใกล้เป้า", "ต่ำกว่าเป้า": "ต่ำกว่าเป้า"}[status]
     st.markdown(f"""
-    <div style="background:{bg};border-left:6px solid {color};
-                border-radius:8px;padding:14px 16px;margin-bottom:8px;">
-      <div style="font-size:15px;font-weight:700;color:#333;">{name}</div>
-      <div style="font-size:12px;color:#666;margin-bottom:6px;">{position}</div>
-      <div style="font-size:26px;font-weight:800;color:{color};">{score:.2f} <span style="font-size:14px;color:#888;">/ {max_score:.0f} คะแนน</span></div>
+    <div style="background:#f4f4f4;border-left:4px solid {color};
+                border-radius:0px;padding:16px;margin-bottom:8px;
+                border-bottom:1px solid #e0e0e0;">
+      <div style="font-size:11px;color:#525252;letter-spacing:0.32px;
+                  text-transform:uppercase;margin-bottom:6px;">{position}</div>
+      <div style="font-size:18px;font-weight:600;color:#161616;margin-bottom:10px;">{name}</div>
+      <div style="font-size:34px;font-weight:300;color:{color};line-height:1.1;">{score:.2f}</div>
+      <div style="font-size:12px;color:#525252;letter-spacing:0.32px;margin-bottom:10px;">/ {max_score:.0f} คะแนน</div>
+      <span style="background:{bg};color:{color};padding:3px 10px;
+                   border-radius:24px;font-size:11px;font-weight:600;
+                   letter-spacing:0.16px;">{EMOJI_MAP[status]} {tag_label}</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -125,11 +133,15 @@ def render(filepath: str = REAL_FILE) -> None:
         fig.add_vline(x=100, line_dash="dash", line_color="black",
                       annotation_text="เกณฑ์ 100%")
         fig.update_layout(
-            title="คะแนนที่ได้ต่อคะแนนเต็ม รายหัวข้อ KPI (%)",
-            xaxis=dict(title="% คะแนนที่ได้", range=[0, 100]),
-            height=max(400, len(kpi_chart) * 35),
-            margin=dict(l=10, r=80, t=50, b=30),
-            font=dict(family="Sarabun, sans-serif"),
+            title=dict(text="คะแนนที่ได้ต่อคะแนนเต็ม รายหัวข้อ KPI (%)",
+                       font=dict(size=16, weight=300, color="#161616")),
+            xaxis=dict(title="% คะแนนที่ได้", range=[0, 100],
+                       gridcolor="#e0e0e0", linecolor="#c6c6c6", tickfont=dict(color="#525252")),
+            yaxis=dict(tickfont=dict(color="#161616", size=13)),
+            height=max(400, len(kpi_chart) * 40),
+            margin=dict(l=10, r=100, t=50, b=30),
+            plot_bgcolor="#ffffff", paper_bgcolor="#ffffff",
+            font=dict(family="IBM Plex Sans, Sarabun, sans-serif"),
         )
         st.plotly_chart(fig, use_container_width=True)
 

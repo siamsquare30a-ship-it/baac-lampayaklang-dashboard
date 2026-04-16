@@ -9,13 +9,15 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from data.real_loader import load_zone_kpi, REAL_FILE
 
-COLOR_MAP = {"บรรลุเป้า": "#28a745", "ใกล้เป้า": "#ffc107", "ต่ำกว่าเป้า": "#dc3545"}
+# IBM Carbon status colors
+COLOR_MAP = {"บรรลุเป้า": "#24a148", "ใกล้เป้า": "#b28600", "ต่ำกว่าเป้า": "#da1e28"}
 EMOJI_MAP = {"บรรลุเป้า": "✅", "ใกล้เป้า": "⚠️", "ต่ำกว่าเป้า": "🔴"}
-BG_MAP    = {"บรรลุเป้า": "#d4edda", "ใกล้เป้า": "#fff3cd", "ต่ำกว่าเป้า": "#f8d7da"}
+BG_MAP    = {"บรรลุเป้า": "#defbe6", "ใกล้เป้า": "#fcf4d6", "ต่ำกว่าเป้า": "#fff1f1"}
 
+# IBM Blue 60 + Cyan 50 (Carbon palette)
 ZONE_COLORS = {
-    "เขต พิราวรรณ": "#007bff",
-    "เขต พรพงศ์":  "#fd7e14",
+    "เขต พิราวรรณ": "#0f62fe",
+    "เขต พรพงศ์":  "#1192e8",
 }
 
 
@@ -57,15 +59,18 @@ def render(filepath: str = REAL_FILE) -> None:
         color = ZONE_COLORS.get(zone, "#6c757d")
         with col:
             st.markdown(f"""
-            <div style="border-left:6px solid {color};background:#f8f9fa;
-                        border-radius:8px;padding:14px;margin-bottom:8px;">
-              <div style="font-size:16px;font-weight:700;color:#333;">{zone}</div>
-              <div style="font-size:24px;font-weight:800;color:{color};">
-                {total_sc:.2f} <span style="font-size:13px;color:#888;">/ {total_max:.1f} คะแนน</span>
-              </div>
-              <div style="font-size:13px;color:{color};">ได้ {pct:.1f}% ของเต็ม</div>
-              <div style="font-size:12px;margin-top:6px;">
-                ✅ {achieved} &nbsp;&nbsp; ⚠️ {near} &nbsp;&nbsp; 🔴 {below}
+            <div style="background:#f4f4f4;border-left:4px solid {color};
+                        border-radius:0px;padding:16px;margin-bottom:8px;
+                        border-bottom:1px solid #e0e0e0;">
+              <div style="font-size:11px;color:#525252;letter-spacing:0.32px;
+                          text-transform:uppercase;margin-bottom:6px;">{zone}</div>
+              <div style="font-size:36px;font-weight:300;color:{color};line-height:1.1;">{total_sc:.2f}</div>
+              <div style="font-size:12px;color:#525252;letter-spacing:0.32px;margin-bottom:10px;">/ {total_max:.1f} คะแนน</div>
+              <div style="font-size:13px;font-weight:600;color:{color};margin-bottom:10px;">ได้ {pct:.1f}% ของเต็ม</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <span style="background:#defbe6;color:#24a148;padding:3px 10px;border-radius:24px;font-size:11px;font-weight:600;">✅ {achieved}</span>
+                <span style="background:#fcf4d6;color:#b28600;padding:3px 10px;border-radius:24px;font-size:11px;font-weight:600;">⚠️ {near}</span>
+                <span style="background:#fff1f1;color:#da1e28;padding:3px 10px;border-radius:24px;font-size:11px;font-weight:600;">🔴 {below}</span>
               </div>
             </div>
             """, unsafe_allow_html=True)
@@ -108,11 +113,16 @@ def render(filepath: str = REAL_FILE) -> None:
 
     fig.update_layout(
         barmode="group",
-        title="ผลจริง vs เป้าหมาย (แยกเขต)",
-        height=max(500, len(pivot) * 50),
+        title=dict(text="ผลจริง vs เป้าหมาย (แยกเขต)",
+                   font=dict(size=16, weight=300, color="#161616")),
+        height=max(500, len(pivot) * 55),
         margin=dict(l=10, r=30, t=50, b=30),
-        font=dict(family="Sarabun, sans-serif"),
-        legend=dict(orientation="h", yanchor="bottom", y=1.01),
+        plot_bgcolor="#ffffff", paper_bgcolor="#ffffff",
+        font=dict(family="IBM Plex Sans, Sarabun, sans-serif"),
+        legend=dict(orientation="h", yanchor="bottom", y=1.01,
+                    font=dict(size=13, color="#161616")),
+        xaxis=dict(gridcolor="#e0e0e0", linecolor="#c6c6c6", tickfont=dict(color="#525252")),
+        yaxis=dict(tickfont=dict(color="#161616", size=13)),
     )
     st.plotly_chart(fig, use_container_width=True)
 

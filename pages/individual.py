@@ -10,9 +10,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from data.real_loader import load_staff_kpi, load_dashboard_summary, STAFF_SHEETS, STAFF_META, REAL_FILE
 from components.charts import gauge_chart
 
-COLOR_MAP = {"บรรลุเป้า": "#28a745", "ใกล้เป้า": "#ffc107", "ต่ำกว่าเป้า": "#dc3545"}
+# IBM Carbon status colors
+COLOR_MAP = {"บรรลุเป้า": "#24a148", "ใกล้เป้า": "#b28600", "ต่ำกว่าเป้า": "#da1e28"}
 EMOJI_MAP = {"บรรลุเป้า": "✅", "ใกล้เป้า": "⚠️", "ต่ำกว่าเป้า": "🔴"}
-BG_MAP    = {"บรรลุเป้า": "#d4edda", "ใกล้เป้า": "#fff3cd", "ต่ำกว่าเป้า": "#f8d7da"}
+BG_MAP    = {"บรรลุเป้า": "#defbe6", "ใกล้เป้า": "#fcf4d6", "ต่ำกว่าเป้า": "#fff1f1"}
 
 
 def _waterfall_chart(df: pd.DataFrame, staff_name: str) -> go.Figure:
@@ -85,18 +86,26 @@ def _render_one_staff(sheet: str, filepath: str) -> None:
 
     c_info, c_gauge = st.columns([2, 1])
     with c_info:
+        tag_label = {"บรรลุเป้า": "บรรลุเป้า", "ใกล้เป้า": "ใกล้เป้า", "ต่ำกว่าเป้า": "ต่ำกว่าเป้า"}[status]
         st.markdown(f"""
-        <div style="background:{BG_MAP[status]};border-left:6px solid {color};
-                    border-radius:8px;padding:14px;margin-bottom:10px;">
-          <div style="font-size:18px;font-weight:800;color:#333;">
-            {EMOJI_MAP[status]} {meta.get('full_name', sheet)}
+        <div style="background:#f4f4f4;border-left:4px solid {color};
+                    border-radius:0px;padding:16px 20px;margin-bottom:10px;
+                    border-bottom:1px solid #e0e0e0;">
+          <div style="font-size:11px;color:#525252;letter-spacing:0.32px;
+                      text-transform:uppercase;margin-bottom:6px;">
+            {meta.get('position','')} &nbsp;·&nbsp; {meta.get('zone','')}
           </div>
-          <div style="font-size:13px;color:#555;margin-bottom:6px;">
-            {meta.get('position','')} &nbsp;|&nbsp; {meta.get('zone','')}
+          <div style="font-size:22px;font-weight:600;color:#161616;margin-bottom:8px;">
+            {meta.get('full_name', sheet)}
           </div>
-          <div style="font-size:22px;font-weight:700;color:{color};">
-            คะแนน Performance: {score_perf:.2f} / {max_perf:.0f}
+          <div style="font-size:38px;font-weight:300;color:{color};line-height:1.1;">{score_perf:.2f}</div>
+          <div style="font-size:12px;color:#525252;letter-spacing:0.32px;margin-bottom:12px;">
+            / {max_perf:.0f} คะแนน Performance
           </div>
+          <span style="background:{BG_MAP[status]};color:{color};padding:4px 12px;
+                       border-radius:24px;font-size:11px;font-weight:600;letter-spacing:0.16px;">
+            {EMOJI_MAP[status]} {tag_label}
+          </span>
         </div>
         """, unsafe_allow_html=True)
 
@@ -137,11 +146,15 @@ def _render_one_staff(sheet: str, filepath: str) -> None:
         ))
         fig.add_vline(x=100, line_dash="dash", line_color="black")
         fig.update_layout(
-            title="คะแนนที่ได้ vs คะแนนเต็ม รายหัวข้อ (%)",
-            xaxis=dict(range=[0, 100], title="% คะแนน"),
-            height=max(350, len(chart_df) * 38),
-            margin=dict(l=10, r=80, t=50, b=30),
-            font=dict(family="Sarabun, sans-serif"),
+            title=dict(text="คะแนนที่ได้ vs คะแนนเต็ม รายหัวข้อ (%)",
+                       font=dict(size=16, weight=300, color="#161616")),
+            xaxis=dict(range=[0, 100], title="% คะแนน",
+                       gridcolor="#e0e0e0", linecolor="#c6c6c6", tickfont=dict(color="#525252")),
+            yaxis=dict(tickfont=dict(color="#161616", size=13)),
+            height=max(350, len(chart_df) * 42),
+            margin=dict(l=10, r=100, t=50, b=30),
+            plot_bgcolor="#ffffff", paper_bgcolor="#ffffff",
+            font=dict(family="IBM Plex Sans, Sarabun, sans-serif"),
         )
         st.plotly_chart(fig, use_container_width=True)
 

@@ -40,10 +40,140 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap');
-html, body, [class*="css"] { font-family: 'Sarabun', sans-serif !important; }
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;600&family=IBM+Plex+Sans:wght@300;400;600&family=Sarabun:wght@300;400;600&display=swap');
+
+/* ── IBM Carbon Design System tokens ── */
+:root {
+  --cds-background:        #ffffff;
+  --cds-layer-01:          #f4f4f4;
+  --cds-layer-02:          #e0e0e0;
+  --cds-text-primary:      #161616;
+  --cds-text-secondary:    #525252;
+  --cds-border-subtle:     #c6c6c6;
+  --cds-border-strong:     #8d8d8d;
+  --cds-interactive:       #0f62fe;
+  --cds-support-success:   #24a148;
+  --cds-support-warning:   #b28600;
+  --cds-support-error:     #da1e28;
+}
+
+/* ── Base typography ── */
+html, body, [class*="css"] {
+  font-family: 'IBM Plex Sans Thai', 'IBM Plex Sans', 'Sarabun', sans-serif !important;
+  color: var(--cds-text-primary);
+  background-color: var(--cds-background);
+}
 div[data-testid="stSidebarNav"] { display: none; }
-.stTabs [data-baseweb="tab"] { font-size: 15px; font-weight: 600; }
+
+/* ── Sidebar — Carbon Gray 100 dark ── */
+section[data-testid="stSidebar"] {
+  background-color: #161616 !important;
+  border-right: 1px solid #393939 !important;
+}
+section[data-testid="stSidebar"] .stMarkdown,
+section[data-testid="stSidebar"] label,
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] span,
+section[data-testid="stSidebar"] div {
+  color: #c6c6c6 !important;
+}
+section[data-testid="stSidebar"] h1,
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3 {
+  color: #f4f4f4 !important;
+  font-weight: 600 !important;
+}
+section[data-testid="stSidebar"] hr {
+  border-color: #393939 !important;
+}
+/* Radio selected item highlight */
+section[data-testid="stSidebar"] [data-testid="stRadio"] label:hover span {
+  color: #ffffff !important;
+}
+
+/* ── Page headers ── */
+h1 { font-size: 2rem !important; font-weight: 300 !important;
+     color: #161616 !important; letter-spacing: 0 !important; }
+h2 { font-size: 1.5rem  !important; font-weight: 300 !important;
+     color: #161616 !important; }
+h3 { font-size: 1.25rem !important; font-weight: 600 !important;
+     color: #161616 !important; }
+
+/* ── Metrics ── */
+[data-testid="stMetricLabel"] {
+  font-size: 12px !important; color: #525252 !important;
+  letter-spacing: 0.32px !important; font-weight: 400 !important;
+}
+[data-testid="stMetricValue"] {
+  font-size: 2rem !important; font-weight: 300 !important; color: #161616 !important;
+}
+[data-testid="metric-container"] {
+  background: #f4f4f4;
+  border-left: 4px solid #0f62fe;
+  padding: 12px 16px !important;
+  border-radius: 0px !important;
+}
+
+/* ── Tabs — Carbon underline style ── */
+.stTabs [data-baseweb="tab"] {
+  font-size: 14px !important; font-weight: 400 !important;
+  letter-spacing: 0.16px !important; color: #525252 !important;
+  border-radius: 0px !important;
+  border-bottom: 2px solid transparent !important;
+}
+.stTabs [aria-selected="true"] {
+  color: #161616 !important;
+  border-bottom: 2px solid #0f62fe !important;
+  background: transparent !important;
+}
+.stTabs [data-baseweb="tab-list"] {
+  background: transparent !important;
+  border-bottom: 1px solid #e0e0e0 !important;
+  gap: 0 !important;
+}
+
+/* ── Buttons — Carbon primary, 0px radius ── */
+.stButton > button {
+  border-radius: 0px !important;
+  background-color: #0f62fe !important;
+  color: #ffffff !important;
+  font-weight: 400 !important;
+  font-family: 'IBM Plex Sans Thai', 'IBM Plex Sans', sans-serif !important;
+  height: 48px !important;
+  border: none !important;
+  letter-spacing: 0.16px !important;
+  font-size: 14px !important;
+}
+.stButton > button:hover { background-color: #0353e9 !important; }
+.stButton > button:active { background-color: #002d9c !important; }
+
+/* ── Selectbox ── */
+.stSelectbox > div > div {
+  border-radius: 0px !important;
+  border: none !important;
+  border-bottom: 2px solid #161616 !important;
+  background-color: #f4f4f4 !important;
+  font-size: 14px !important;
+}
+
+/* ── Dataframe ── */
+.stDataFrame { border: none !important; }
+.stDataFrame table { font-size: 14px !important; letter-spacing: 0.16px !important; }
+.stDataFrame thead tr th {
+  background: #161616 !important; color: #f4f4f4 !important;
+  font-weight: 600 !important; font-size: 12px !important;
+  letter-spacing: 0.32px !important; border: none !important;
+  text-transform: uppercase !important;
+}
+.stDataFrame tbody tr:nth-child(even) td { background: #f4f4f4 !important; }
+.stDataFrame tbody tr:hover td { background: #e8e8e8 !important; }
+.stDataFrame tbody tr td { border-bottom: 1px solid #e0e0e0 !important; }
+
+/* ── Divider ── */
+hr { border-color: #e0e0e0 !important; margin: 24px 0 !important; }
+
+/* ── Warning/Info banners ── */
+[data-testid="stAlert"] { border-radius: 0px !important; }
 </style>
 """, unsafe_allow_html=True)
 
