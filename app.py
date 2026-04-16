@@ -210,19 +210,21 @@ if not check_login():
 # SIDEBAR (เฉพาะผู้ที่ login แล้ว)
 # =========================================================
 with st.sidebar:
-    # Logo ธ.ก.ส. — ใช้ HTML แทน external image ที่โหลดไม่ได้
-    st.markdown("""
-    <div style="display:flex;align-items:center;gap:10px;padding:4px 0 8px;">
-      <div style="background:#00693e;color:#ffffff;font-size:15px;font-weight:800;
-                  width:44px;height:44px;border-radius:8px;display:flex;
-                  align-items:center;justify-content:center;letter-spacing:0.5px;
-                  flex-shrink:0;">ธ.ก.ส</div>
-      <div>
-        <div style="font-size:13px;font-weight:700;color:#111827;line-height:1.2;">ธ.ก.ส.</div>
-        <div style="font-size:11px;color:#6b7280;">หน่วยลำพญากลาง</div>
-      </div>
-    </div>
-    """, unsafe_allow_html=True)
+    # Logo ธ.ก.ส. — อ่านไฟล์ SVG และ embed เป็น base64
+    import base64
+    _logo_path = os.path.join(_THIS_DIR, "assets", "BAAC_Logo.svg")
+    try:
+        with open(_logo_path, "rb") as _f:
+            _logo_b64 = base64.b64encode(_f.read()).decode()
+        st.markdown(
+            f'<div style="padding:4px 0 8px;">'
+            f'<img src="data:image/svg+xml;base64,{_logo_b64}" '
+            f'width="64" style="display:block;"/></div>',
+            unsafe_allow_html=True,
+        )
+    except Exception:
+        st.markdown('<div style="font-size:22px;padding-bottom:8px;">🏦</div>',
+                    unsafe_allow_html=True)
     st.divider()
 
     # ---- ข้อมูลผู้ใช้ ----
